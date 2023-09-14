@@ -1,6 +1,7 @@
 import { Appointment } from './Appointment'
 import { Doctor, Period, Specialization } from './Doctor'
 import { HospitalInternment } from './HospitalInternment'
+import { Medicine } from './Medicine'
 import { Patient } from './Patient'
 import { Prescription } from './Prescription'
 

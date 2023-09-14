@@ -1,5 +1,5 @@
 // Criação da classe de Medicamento
-class Medicine {
+export class Medicine {
   name: string
   dosage: string
   instruction: string
