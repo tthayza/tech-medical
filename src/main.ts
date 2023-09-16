@@ -203,9 +203,12 @@ function scheduleAppointment(id: number) {
 
   appointmentItem?.appendChild(paragraph)
 }
-
+let responseDiagnosis = document.querySelector(
+  '#response-diagnosis'
+) as HTMLDivElement
 const btnCheckAppointment = document.querySelector('#btn-check-appointment')
 btnCheckAppointment?.addEventListener('click', () => {
+  responseDiagnosis.innerHTML = ``
   const inputIdPatient = Number(
     (document.querySelector('#patient-id') as HTMLInputElement).value
   )
@@ -248,11 +251,13 @@ btnCheckAppointment?.addEventListener('click', () => {
   }
 })
 
-const btnCheckDiagnosis = document.querySelector('#check-diagnosis')
-btnCheckDiagnosis?.addEventListener('click', () => {
-  const divDiagnosisForm = document.querySelector(
-    '#check-diagnosis-item'
-  ) as HTMLDivElement
+let divDiagnosisForm = document.querySelector(
+  '#check-diagnosis-item'
+) as HTMLDivElement
+let response = document.createElement('p')
+const btnCheckDiagnosisArea = document.querySelector('#check-diagnosis-area')
+btnCheckDiagnosisArea?.addEventListener('click', () => {
+  response.innerHTML = ``
   divDiagnosisForm.classList.toggle('block')
   const btnEnterDiagnosis = document.querySelector(
     '#btn-enter-diagnosis'
@@ -262,11 +267,47 @@ btnCheckDiagnosis?.addEventListener('click', () => {
   } else btnEnterDiagnosis.style.display = 'block'
 })
 
+const btnCheckDiagnosisPatient = document.querySelector(
+  '#check-diagnosis-patient'
+)
+btnCheckDiagnosisPatient?.addEventListener('click', () => {
+  const patientIdDiagnosis = Number(
+    (document.querySelector('#patient-id-diagnosis') as HTMLInputElement).value
+  )
+  const currentPatient = searchPatientById(patientIdDiagnosis)
+  if (currentPatient) {
+    const diagnosisPatientArea = document.createElement('div')
+    responseDiagnosis!.appendChild(diagnosisPatientArea)
+    if (currentPatient.diagnoses.length > 0) {
+      for (const diagnosis of currentPatient.diagnoses) {
+        diagnosisPatientArea.innerHTML = `<p> Diagnosis: ${diagnosis.getMainComplaint()} </p><br> <p> Diagnosis description: ${diagnosis.getDiagnosisDescription()}</p> <br> <p>Suggested Treatment: ${diagnosis.getSuggestedTreatment()} </p>`
+        return
+      }
+    } else {
+      diagnosisPatientArea.innerHTML = `There no available diagnosis for that patient`
+      return
+    }
+  } else {
+    response.innerHTML = `Patient not found`
+
+    responseDiagnosis!.appendChild(response)
+  }
+  console.log(currentPatient)
+})
+
+function searchPatientById(patientId: number): Patient | undefined {
+  for (const patient of myHosp.listedPatients) {
+    if (patient.id === patientId) {
+      return patient
+    }
+  }
+  return undefined
+}
+
 const btnEnterDiagnosis = document.querySelector(
   '#btn-enter-diagnosis'
 ) as HTMLButtonElement
 btnEnterDiagnosis.addEventListener('click', () => {
-  console.log('oi')
   const enterDivForm = document.querySelector('#enter-diagnosis-item')
   enterDivForm?.classList.toggle('block')
 })
