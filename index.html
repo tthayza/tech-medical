@@ -4,108 +4,132 @@
     <link rel="stylesheet" href="./src/style.css" />
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Tenor+Sans&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <title>Tech Medical</title>
   </head>
   <body>
-    <div id="app">
+    <header class="header">
       <h1>Tech Medical</h1>
+    </header>
+    <div id="app">
       <div id="container">
-        <div id="register" class="item">
-          <form action="" id="register-form">
-            <h2>Register</h2>
-            <input type="radio" name="option" id="isDoctor" value="" />
-            <label for="isDoctor">I am a doctor</label>
-            <input type="radio" name="option" id="isPatient" value="" />
-            <label for="isPatient">I am a patient</label>
-            <button type="submit" id="btn-register">Register</button>
-          </form>
-        </div>
-        <form
-          action="http://localhost:5173"
-          method="post"
-          id="doctor-register"
-          style="display: none"
-          class="item"
-        >
-          <h2>Register as a doctor</h2>
-          <label for="">Name</label>
-          <input class="input" type="text" name="nameDoctor" />
-          <label for="">Specialization</label>
-          <select
-            class="input"
-            name="specialization"
-            id="register-specialization"
-          ></select>
-          <label for="">Register Number</label>
-          <input class="input" type="text" name="numberRegister" />
-          <label for="">Period</label>
-          <select class="input" name="period" id="register-period"></select>
-          <button type="submit">Register</button>
+        <form action="" id="register-form" style="display: flex">
+          <h2>Register</h2>
+          <input type="radio" name="option" id="isDoctor" value="" />
+          <label for="isDoctor">I am a doctor</label>
+          <input type="radio" name="option" id="isPatient" value="" />
+          <label for="isPatient">I am a patient</label>
+          <button type="submit" id="btn-register">Register</button>
         </form>
-        <form
-          action="http://localhost:5173"
-          method="post"
-          id="patient-register"
-          style="display: none"
-          class="item"
-        >
-          <h2>Register as a Patient</h2>
-          <label for="">Name</label>
-          <input class="input" required type="text" name="namePatient" />
-          <label for="">ID Patient</label>
-          <input class="input" required type="text" name="id" />
+        <button id="back-home-btn" style="display: none">
+          <i class="ph ph-arrow-left"></i> Back
+        </button>
+        <section id="patient-area" style="display: none">
+          <h3>Patient Area</h3>
+          <div id="container-patient-area">
+            <form
+              action="http://localhost:5173"
+              method="post"
+              id="patient-register"
+              class="item"
+            >
+              <h3>Register as a Patient</h3>
+              <label for="">Name</label>
+              <input class="input" required type="text" name="namePatient" />
+              <label for="">ID Patient</label>
+              <input class="input" required type="text" name="id" />
 
-          <button type="submit">Register</button>
-        </form>
-        <div id="schedule-appointment" class="item" style="display: none">
-          <h2>Schedule Appointment</h2>
-          <select name="" id="select-specialization"></select>
-          <button id="btn-check-doctors">Check available doctors</button>
-          <label for="patient-id">Patient ID</label>
-          <input type="number" id="patient-id" />
-        </div>
-        <div id="check-appointments" class="item">
-          <h2>Check Appointments</h2>
-          <div style="display: none" class="patientId">
-            <label for="patientId">ID Patient</label>
-            <input type="text" id="patientId" />
+              <button type="submit">Register</button>
+            </form>
+            <div id="schedule-appointment" class="item">
+              <h3>Schedule Appointment</h3>
+              <select name="" id="select-specialization"></select>
+              <button id="btn-check-doctors">Check available doctors</button>
+              <label for="patient-id">Patient ID</label>
+              <input type="number" id="patient-id" />
+            </div>
+            <div id="check-appointments-patient" class="item">
+              <h3>Check Appointments</h3>
+              <div class="patientId" style="display: none">
+                <label for="patientId">ID Patient</label>
+                <input type="text" id="patientId" />
+              </div>
+
+              <button id="btn-check-appointment-patient">Check</button>
+            </div>
           </div>
+        </section>
+        <section id="doctor-area" style="display: none">
+          <h2>Doctor Area</h2>
+          <div id="container-doctor-area">
+            <form
+              action="http://localhost:5173"
+              method="post"
+              id="doctor-register"
+              class="item"
+            >
+              <h3>Register as a doctor</h3>
+              <label for="">Name</label>
+              <input class="input" type="text" name="nameDoctor" />
+              <label for="">Specialization</label>
+              <select
+                class="input"
+                name="specialization"
+                id="register-specialization"
+              ></select>
+              <label for="">Register Number</label>
+              <input class="input" type="text" name="numberRegister" />
+              <label for="">Period</label>
+              <select class="input" name="period" id="register-period"></select>
+              <button type="submit">Register</button>
+            </form>
+            <div id="monitor-diagnosis" class="item">
+              <h3>Monitor Diagnosis</h3>
 
-          <div class="doctorId" style="display: none">
-            <label for="doctorId">ID Doctor</label>
-            <input type="text" id="doctorId" />
+              <button class="block" id="check-diagnosis-area">
+                Check Diagnosis
+              </button>
+              <div class="hide" id="check-diagnosis-item">
+                <label for="">Patient ID</label>
+                <input type="text" id="patient-id-diagnosis" />
+                <button id="check-diagnosis-patient">Check</button>
+              </div>
+
+              <button id="btn-enter-diagnosis" style="display: block">
+                Enter Diagnosis
+              </button>
+              <div class="hide" id="enter-diagnosis-item">
+                <label for="">Appointment ID</label>
+                <input type="text" id="appointment-id" />
+                <label for="">Diagnosis</label>
+                <input type="text" id="diagnosis-title" />
+                <label for="">Description</label>
+                <input type="text" id="diagnosis-description" />
+                <label for="">Suggested Treatment</label>
+                <input type="text" id="diagnosis-treatment" />
+                <button id="send-diagnosis">Send Diagnosis</button>
+              </div>
+              <div id="response-diagnosis"></div>
+            </div>
+            <div id="check-appointments-doctor" class="item">
+              <h3>Check Appointments</h3>
+
+              <div class="doctorId" style="display: none">
+                <label for="doctorId">ID Doctor</label>
+                <input type="text" id="doctorId" />
+              </div>
+
+              <button id="btn-check-appointment-doctor">Check</button>
+            </div>
           </div>
-
-          <button id="btn-check-appointment">Check</button>
-        </div>
-        <div id="monitor-diagnosis" class="item" style="display: none">
-          <h2>Monitor Diagnosis</h2>
-
-          <button class="block" id="check-diagnosis-area">
-            Check Diagnosis
-          </button>
-          <div class="hide" id="check-diagnosis-item">
-            <label for="">Patient ID</label>
-            <input type="text" id="patient-id-diagnosis" />
-            <button id="check-diagnosis-patient">Check</button>
-          </div>
-
-          <button id="btn-enter-diagnosis" style="display: block">
-            Enter Diagnosis
-          </button>
-          <div class="hide" id="enter-diagnosis-item">
-            <label for="">Appointment ID</label>
-            <input type="text" id="appointment-id" />
-            <label for="">Diagnosis</label>
-            <input type="text" id="diagnosis-title" />
-            <label for="">Description</label>
-            <input type="text" id="diagnosis-description" />
-            <label for="">Suggested Treatment</label>
-            <input type="text" id="diagnosis-treatment" />
-            <button id="send-diagnosis">Send Diagnosis</button>
-          </div>
-          <div id="response-diagnosis"></div>
-        </div>
+        </section>
 
         <div class="table">
           <table id="table">

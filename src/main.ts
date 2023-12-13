@@ -3,11 +3,11 @@ import { Hospital } from './models/Hospital'
 import { Patient } from './models/Patient'
 
 const myHosp = new Hospital()
-let body = document.querySelector('body')
+const backHomeBtn = document.querySelector('#back-home-btn') as HTMLElement
 const appointmentSelect = document.querySelector(
   '#select-specialization'
 ) as HTMLSelectElement
-const registerForm = document.querySelector('#register-form')
+const registerForm = document.querySelector('#register-form') as HTMLFormElement
 const isDoctor = document.querySelector('#isDoctor') as HTMLInputElement
 const doctorForm = document.querySelector('#doctor-register') as HTMLFormElement
 const patientForm = document.querySelector(
@@ -84,27 +84,32 @@ export function start() {
   })
 }
 
+const patientArea = document.querySelector('#patient-area') as HTMLElement
+const doctorArea = document.querySelector('#doctor-area') as HTMLElement
 registerForm?.addEventListener('submit', (e) => {
   e.preventDefault()
+
   if (isDoctor.checked) {
-    console.log('check')
-    doctorForm.style.display = 'block'
-    patientForm.style.display = 'none'
+    patientArea.style.display = 'none'
+    doctorArea.style.display = 'block'
     doctorId.style.display = 'block'
     patientId.style.display = 'none'
-
-    if (monitorDiagnosis) monitorDiagnosis.style.display = 'block'
-    appointmentItem.style.display = 'none'
   } else {
-    patientForm.style.display = 'block'
-    doctorForm.style.display = 'none'
-    monitorDiagnosis.style.display = 'none'
     patientId.style.display = 'block'
     doctorId.style.display = 'none'
-    if (appointmentItem) {
-      appointmentItem.style.display = 'block'
-    }
+    patientArea.style.display = 'block'
+    doctorArea.style.display = 'none'
   }
+  backHomeBtn.style.display = 'flex'
+  registerForm.style.display = 'none'
+})
+
+backHomeBtn.addEventListener('click', (e) => {
+  e.preventDefault()
+  registerForm.style.display = 'flex'
+  backHomeBtn.style.display = 'none'
+  doctorArea.style.display = 'block' ? 'none' : 'block'
+  patientArea.style.display = 'block' ? 'none' : 'block'
 })
 
 function sendData(typeForm: HTMLFormElement) {
@@ -129,6 +134,8 @@ function loadSpecializations() {
   })
 }
 
+let textDoc = document.createElement('p')
+textDoc.textContent = ''
 doctorForm.addEventListener('submit', function (event) {
   event.preventDefault()
   const formData = sendData(doctorForm)
@@ -139,31 +146,30 @@ doctorForm.addEventListener('submit', function (event) {
     formData.period as Period
   )
   myHosp.registerDoctor(newDoctor)
-  const text = document.createElement('p')
-  text.textContent = `Médico Registrado!`
-  doctorForm.appendChild(text)
+  textDoc.textContent = `Registered Doctor!`
+  doctorForm.appendChild(textDoc)
 
   loadSpecializations()
 })
 
+let textPatient = document.createElement('p')
+textPatient.textContent = ''
 patientForm.addEventListener('submit', function (event) {
   event.preventDefault()
   const formData = sendData(patientForm)
   const newPatient = new Patient(formData.namePatient, Number(formData.id))
   myHosp.registerPatient(newPatient)
-  const text = document.createElement('p')
-  text.textContent = `Paciente Registrado!`
+  textPatient.textContent = `Registered Patient!`
 
-  patientForm.appendChild(text)
+  patientForm.appendChild(textPatient)
 })
-
+let table = document.querySelector('#table')
+let tBody = document.querySelector('#tbody') as HTMLTableElement
+tBody.innerHTML = ''
 btnCheckDoctors?.addEventListener('click', () => {
   const specialization = appointmentSelect.value as Specialization
   const listDoctors = myHosp.checkAvailableDoctors(specialization)
-  const table = document.querySelector('#table')
-
-  const tBody = document.querySelector('#tbody') as HTMLTableElement
-
+  tBody.innerHTML = ''
   listDoctors.forEach((doctor, index) => {
     const newRow = document.createElement('tr')
     newRow.setAttribute('id', index.toString())
@@ -175,7 +181,7 @@ btnCheckDoctors?.addEventListener('click', () => {
       newRow.appendChild(newData)
     })
     const btnAppointment = document.createElement('button')
-    btnAppointment.textContent = 'Agendar Consulta'
+    btnAppointment.textContent = 'Schedule Appointment'
     btnAppointment.classList.add('to-schedule')
     btnAppointment.addEventListener('click', () =>
       scheduleAppointment(doctor.register)
@@ -192,30 +198,35 @@ function scheduleAppointment(id: number) {
   )
   const scheduleResponse = myHosp.scheduleAppointment(id, inputIdPatient)
   const paragraph = document.createElement('p')
+  console.log('schedule', scheduleAppointment)
 
   if (scheduleResponse) {
     const table = document.querySelector('.table') as HTMLTableElement
     table.style.display = 'none'
-    paragraph.textContent = 'Consulta agendada'
+    paragraph.textContent = 'Scheduled Appointment'
+    console.log(true)
   } else {
-    paragraph.textContent = 'Você precisa se registrar como paciente!'
+    paragraph.textContent = 'You need to register as a patient!'
+    console.log(false)
   }
 
   appointmentItem?.appendChild(paragraph)
 }
+let divAppointmentsArea = document.querySelector('#check-appointments')
 let responseDiagnosis = document.querySelector(
   '#response-diagnosis'
 ) as HTMLDivElement
-const btnCheckAppointment = document.querySelector('#btn-check-appointment')
-btnCheckAppointment?.addEventListener('click', () => {
-  responseDiagnosis.innerHTML = ``
+const btnCheckAppointmentPatient = document.querySelector(
+  '#btn-check-appointment-patient'
+)
+const btnCheckAppointmentDoctor = document.querySelector(
+  '#btn-check-appointment-doctor'
+)
+btnCheckAppointmentPatient?.addEventListener('click', () => {
   const inputIdPatient = Number(
     (document.querySelector('#patient-id') as HTMLInputElement).value
   )
 
-  const inputIdDoctor = Number(
-    (document.querySelector('#doctorId') as HTMLInputElement).value
-  )
   if (inputIdPatient) {
     const currentPatient = myHosp.listedPatients.find(
       (patient) => patient.id === inputIdPatient
@@ -230,23 +241,30 @@ btnCheckAppointment?.addEventListener('click', () => {
       <p>Date: ${appointment.date.toLocaleDateString()} </p>
       <p>Hour: ${appointment.date.toLocaleTimeString()}</p>
       `
-      body!.appendChild(infosAppointment)
+      divAppointmentsArea!.appendChild(infosAppointment)
     })
   }
+})
+btnCheckAppointmentDoctor?.addEventListener('click', () => {
+  const inputIdDoctor = Number(
+    (document.querySelector('#doctorId') as HTMLInputElement).value
+  )
+  console.log(inputIdDoctor)
   if (inputIdDoctor) {
-    const currentDoctor = myHosp.listedDoctors.find(
-      (doctor) => doctor.register === inputIdDoctor
-    )
-    console.log(currentDoctor)
-    currentDoctor?.listAppointments().forEach((appointment) => {
-      const infosAppointment = document.createElement('div')
-      infosAppointment.classList.add('item')
-      infosAppointment.innerHTML = `
-      <p>Patient: ${appointment.getPatient().name}</p>
-      <p>Date: ${appointment.date.toLocaleDateString()} </p>
-      <p>Hour: ${appointment.date.toLocaleTimeString()}</p>
-      `
-      body!.appendChild(infosAppointment)
+    myHosp.listedDoctors.find((doctor) => {
+      doctor.register === inputIdDoctor
+      const currentDoctor = doctor
+      currentDoctor?.listAppointments().forEach((appointment) => {
+        const infosAppointment = document.createElement('div')
+        infosAppointment.classList.add('item')
+        infosAppointment.innerHTML = `
+        <p>Doctor: ${appointment.getPatient().name}</p>
+        <p>Date: ${appointment.date.toLocaleDateString()} </p>
+        <p>Hour: ${appointment.date.toLocaleTimeString()}</p>
+        `
+        divAppointmentsArea!.appendChild(infosAppointment)
+        console.log(currentDoctor)
+      })
     })
   }
 })
@@ -277,14 +295,19 @@ btnCheckDiagnosisPatient?.addEventListener('click', () => {
   const currentPatient = searchPatientById(patientIdDiagnosis)
   if (currentPatient) {
     const diagnosisPatientArea = document.createElement('div')
+    diagnosisPatientArea.textContent = ''
     responseDiagnosis!.appendChild(diagnosisPatientArea)
     if (currentPatient.diagnoses.length > 0) {
       for (const diagnosis of currentPatient.diagnoses) {
-        diagnosisPatientArea.innerHTML = `<p> Diagnosis: ${diagnosis.getMainComplaint()} </p><br> <p> Diagnosis description: ${diagnosis.getDiagnosisDescription()}</p> <br> <p>Suggested Treatment: ${diagnosis.getSuggestedTreatment()} </p>`
+        diagnosisPatientArea.innerHTML = `<p> Diagnosis: ${diagnosis.getMainComplaint()}</p>
+        <br>
+        <p> Diagnosis description: ${diagnosis.getDiagnosisDescription()}</p>
+        <br>
+        <p>Suggested Treatment: ${diagnosis.getSuggestedTreatment()} </p>`
         return
       }
     } else {
-      diagnosisPatientArea.innerHTML = `There no available diagnosis for that patient`
+      response.innerHTML = `<p>There no available diagnosis for that patient</p>`
       return
     }
   } else {
@@ -311,10 +334,5 @@ btnEnterDiagnosis.addEventListener('click', () => {
   const enterDivForm = document.querySelector('#enter-diagnosis-item')
   enterDivForm?.classList.toggle('block')
 })
-
-// check-diagnosis-item
-// diagnosis-title
-// diagnosis-description
-// diagnosis-treatment
 
 start()
