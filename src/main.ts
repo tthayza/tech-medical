@@ -13,6 +13,7 @@ const doctorForm = document.querySelector('#doctor-register') as HTMLFormElement
 const patientForm = document.querySelector(
   '#patient-register'
 ) as HTMLFormElement
+
 const registerSpecialization = document.querySelector(
   '#register-specialization'
 )
@@ -66,7 +67,6 @@ export function start() {
     const option = document.createElement('option')
     option.textContent = specialization
     option.setAttribute('id', index.toString())
-    appointmentSelect?.appendChild(option)
   })
   const specializations = Object.keys(Specialization)
   specializations.forEach((specialization, index) => {
@@ -175,10 +175,11 @@ btnCheckDoctors?.addEventListener('click', () => {
     newRow.setAttribute('id', index.toString())
 
     Object.values(doctor).forEach((doctorInfo) => {
-      const newData = document.createElement('td')
-      newData.textContent = doctorInfo
-
-      newRow.appendChild(newData)
+      if (doctorInfo.length > 0) {
+        const newData = document.createElement('td')
+        newData.textContent = doctorInfo
+        newRow.appendChild(newData)
+      }
     })
     const btnAppointment = document.createElement('button')
     btnAppointment.textContent = 'Schedule Appointment'
@@ -198,16 +199,13 @@ function scheduleAppointment(id: number) {
   )
   const scheduleResponse = myHosp.scheduleAppointment(id, inputIdPatient)
   const paragraph = document.createElement('p')
-  console.log('schedule', scheduleAppointment)
 
   if (scheduleResponse) {
     const table = document.querySelector('.table') as HTMLTableElement
     table.style.display = 'none'
     paragraph.textContent = 'Scheduled Appointment'
-    console.log(true)
   } else {
     paragraph.textContent = 'You need to register as a patient!'
-    console.log(false)
   }
 
   appointmentItem?.appendChild(paragraph)
@@ -234,14 +232,16 @@ btnCheckAppointmentPatient?.addEventListener('click', () => {
 
     currentPatient?.listAppointments().forEach((appointment) => {
       const infosAppointment = document.createElement('div')
-      infosAppointment.classList.add('item')
+      infosAppointment.classList.add('item-appointments')
       infosAppointment.innerHTML = `
+      <h4> Appointment Successfully Scheduled! </h4>
       <p>Patient: ${appointment.getPatient().name}</p>
       <p>Doctor: ${appointment.getDoctor().name}</p>
       <p>Date: ${appointment.date.toLocaleDateString()} </p>
       <p>Hour: ${appointment.date.toLocaleTimeString()}</p>
       `
-      divAppointmentsArea!.appendChild(infosAppointment)
+
+      divAppointmentsArea!.append(infosAppointment)
     })
   }
 })
@@ -249,7 +249,6 @@ btnCheckAppointmentDoctor?.addEventListener('click', () => {
   const inputIdDoctor = Number(
     (document.querySelector('#doctorId') as HTMLInputElement).value
   )
-  console.log(inputIdDoctor)
   if (inputIdDoctor) {
     myHosp.listedDoctors.find((doctor) => {
       doctor.register === inputIdDoctor
@@ -263,7 +262,6 @@ btnCheckAppointmentDoctor?.addEventListener('click', () => {
         <p>Hour: ${appointment.date.toLocaleTimeString()}</p>
         `
         divAppointmentsArea!.appendChild(infosAppointment)
-        console.log(currentDoctor)
       })
     })
   }
@@ -315,7 +313,6 @@ btnCheckDiagnosisPatient?.addEventListener('click', () => {
 
     responseDiagnosis!.appendChild(response)
   }
-  console.log(currentPatient)
 })
 
 function searchPatientById(patientId: number): Patient | undefined {

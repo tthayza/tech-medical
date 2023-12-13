@@ -2,6 +2,7 @@
 
 import { Appointment } from './Appointment'
 import { Diagnosis } from './Diagnosis'
+import { Medicine } from './Medicine'
 import { Prescription } from './Prescription'
 import { IAppointmentsList } from './Shared'
 

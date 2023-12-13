@@ -101,7 +101,8 @@ h1 {
   gap: 30px;
 }
 
-.item {
+.item,
+.item-appointments {
   display: flex;
   align-items: center;
   flex-direction: column;
@@ -111,6 +112,17 @@ h1 {
   gap: 10px;
   width: 250px;
   height: 400px;
+  margin: 15px;
+}
+
+.item-appointments {
+  width: 100%;
+  height: fit-content;
+}
+
+.item-appointments p {
+  font-size: 16px;
+  text-align: left;
 }
 
 #container {
@@ -125,16 +137,33 @@ input {
 }
 
 .table {
-  width: 400px;
-}
-
-table {
   width: 100%;
-  height: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
 }
 
-table button {
-  width: 80px;
+/* Estilo para as células da tabela */
+.table td,
+.table th {
+  padding: 12px;
+  border: 1px solid #a1a9c4;
+  text-align: left;
+}
+
+/* Cor de fundo para as células de cabeçalho */
+.table th {
+  background-color: #a1a9c4;
+  color: #fff; /* Cor do texto no cabeçalho */
+}
+
+/* Cor de fundo alternada para as linhas da tabela */
+.table tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+/* Efeito de hover nas linhas da tabela */
+.table tr:hover {
+  background-color: #cfd8dc;
 }
 
 .hide {
