@@ -138,6 +138,10 @@ let textDoc = document.createElement('p')
 textDoc.textContent = ''
 doctorForm.addEventListener('submit', function (event) {
   event.preventDefault()
+  const inputs = document.querySelectorAll('.input')
+  inputs.forEach((element) => {
+    element.value = ''
+  })
   const formData = sendData(doctorForm)
   const newDoctor = new Doctor(
     formData.nameDoctor,
@@ -156,6 +160,10 @@ let textPatient = document.createElement('p')
 textPatient.textContent = ''
 patientForm.addEventListener('submit', function (event) {
   event.preventDefault()
+  const inputs = document.querySelectorAll('.input')
+  inputs.forEach((element) => {
+    element.value = ''
+  })
   const formData = sendData(patientForm)
   const newPatient = new Patient(formData.namePatient, Number(formData.id))
   myHosp.registerPatient(newPatient)
@@ -170,6 +178,16 @@ btnCheckDoctors?.addEventListener('click', () => {
   const specialization = appointmentSelect.value as Specialization
   const listDoctors = myHosp.checkAvailableDoctors(specialization)
   tBody.innerHTML = ''
+
+  const newRow = document.createElement('tr')
+  const newData = document.createElement('td')
+  newData.classList.add('title-table')
+  newData.setAttribute('colspan', '4')
+  newData.textContent = 'Available Doctors'
+
+  newRow.appendChild(newData)
+  tBody.appendChild(newRow)
+  table?.appendChild(tBody)
   listDoctors.forEach((doctor, index) => {
     const newRow = document.createElement('tr')
     newRow.setAttribute('id', index.toString())
