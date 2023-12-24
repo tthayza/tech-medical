@@ -41,25 +41,26 @@
               class="item"
             >
               <h3>Register as a Patient</h3>
-              <label for="">Name</label>
+              <label for="">Name*</label>
               <input class="input" required type="text" name="namePatient" />
-              <label for="">ID Patient</label>
+              <label for="">ID Patient*</label>
               <input class="input" required type="text" name="id" />
 
               <button type="submit">Register</button>
             </form>
             <div id="schedule-appointment" class="item">
               <h3>Schedule Appointment</h3>
-              <select name="" id="select-specialization"></select>
+              <select name="" id="select-specialization" required></select>
               <button id="btn-check-doctors">Check available doctors</button>
-              <label for="patient-id">Patient ID</label>
-              <input type="number" id="patient-id" />
+              <label for="patient-id">Patient ID*</label>
+              <input type="number" id="patient-id" required />
+              <p id="patient-response"></p>
             </div>
             <div id="check-appointments-patient" class="item">
               <h3>Check Appointments</h3>
               <div class="patientId" style="display: none">
-                <label for="patientId">ID Patient</label>
-                <input type="text" id="patientId" />
+                <label for="patientId">ID Patient*</label>
+                <input type="text" id="patientId" required />
               </div>
 
               <button id="btn-check-appointment-patient">Check</button>
@@ -77,17 +78,18 @@
               class="item"
             >
               <h3>Register as a doctor</h3>
-              <label for="">Name</label>
-              <input class="input" type="text" name="nameDoctor" />
-              <label for="">Specialization</label>
+              <label for="nameDoctor">Name*</label>
+              <input class="input" type="text" name="nameDoctor" required />
+              <label for="register-specialization">Specialization*</label>
               <select
+                required
                 class="input"
                 name="specialization"
                 id="register-specialization"
               ></select>
-              <label for="">Register Number</label>
-              <input class="input" type="text" name="numberRegister" />
-              <label for="">Period</label>
+              <label for="numberRegister">Register Number*</label>
+              <input class="input" type="text" name="numberRegister" required />
+              <label for="register-period">Period*</label>
               <select class="input" name="period" id="register-period"></select>
               <button type="submit">Register</button>
             </form>
@@ -98,8 +100,8 @@
                 Check Diagnosis
               </button>
               <div class="hide" id="check-diagnosis-item">
-                <label for="">Patient ID</label>
-                <input type="text" id="patient-id-diagnosis" />
+                <label for="patient-id-diagnosis">Patient ID*</label>
+                <input type="text" id="patient-id-diagnosis" required />
                 <button id="check-diagnosis-patient">Check</button>
               </div>
 
@@ -107,13 +109,13 @@
                 Enter Diagnosis
               </button>
               <div class="hide" id="enter-diagnosis-item">
-                <label for="">Appointment ID</label>
-                <input type="text" id="appointment-id" />
-                <label for="">Diagnosis</label>
-                <input type="text" id="diagnosis-title" />
-                <label for="">Description</label>
-                <input type="text" id="diagnosis-description" />
-                <label for="">Suggested Treatment</label>
+                <label for="appointment-id">Appointment ID*</label>
+                <input type="text" id="appointment-id" required />
+                <label for="diagnosis-title">Diagnosis*</label>
+                <input type="text" id="diagnosis-title" required />
+                <label for="diagnosis-description">Description*</label>
+                <input type="text" id="diagnosis-description" required />
+                <label for="diagnosis-treatment">Suggested Treatment*</label>
                 <input type="text" id="diagnosis-treatment" />
                 <button id="send-diagnosis">Send Diagnosis</button>
               </div>
@@ -123,7 +125,7 @@
               <h3>Check Appointments</h3>
 
               <div class="doctorId" style="display: none">
-                <label for="doctorId">ID Doctor</label>
+                <label for="doctorId">ID Doctor*</label>
                 <input type="text" id="doctorId" />
               </div>
 
