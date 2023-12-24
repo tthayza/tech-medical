@@ -25,7 +25,7 @@ const appointmentItem = document.querySelector(
 const monitorDiagnosis = document.querySelector(
   '#monitor-diagnosis'
 ) as HTMLDivElement
-
+const table = document.querySelector('#table') as HTMLTableElement
 let patientId = document.querySelector('.patientId') as HTMLDivElement
 let doctorId = document.querySelector('.doctorId') as HTMLDivElement
 const med1 = new Doctor(
@@ -110,6 +110,11 @@ backHomeBtn.addEventListener('click', (e) => {
   backHomeBtn.style.display = 'none'
   doctorArea.style.display = 'block' ? 'none' : 'block'
   patientArea.style.display = 'block' ? 'none' : 'block'
+  table.style.display = 'none'
+  let appointmentsElement = document.querySelector(
+    '.item-appointments'
+  ) as HTMLDivElement
+  if (appointmentsElement) appointmentsElement.style.display = 'none'
 })
 
 function sendData(typeForm: HTMLFormElement) {
@@ -138,10 +143,7 @@ let textDoc = document.createElement('p')
 textDoc.textContent = ''
 doctorForm.addEventListener('submit', function (event) {
   event.preventDefault()
-  const inputs = document.querySelectorAll('.input')
-  inputs.forEach((element) => {
-    element.value = ''
-  })
+
   const formData = sendData(doctorForm)
   const newDoctor = new Doctor(
     formData.nameDoctor,
@@ -154,24 +156,29 @@ doctorForm.addEventListener('submit', function (event) {
   doctorForm.appendChild(textDoc)
 
   loadSpecializations()
+  const inputs = document.querySelectorAll('.input')
+  inputs.forEach((element) => {
+    element.value = ''
+  })
 })
 
 let textPatient = document.createElement('p')
 textPatient.textContent = ''
 patientForm.addEventListener('submit', function (event) {
   event.preventDefault()
-  const inputs = document.querySelectorAll('.input')
-  inputs.forEach((element) => {
-    element.value = ''
-  })
+
   const formData = sendData(patientForm)
   const newPatient = new Patient(formData.namePatient, Number(formData.id))
   myHosp.registerPatient(newPatient)
   textPatient.textContent = `Registered Patient!`
 
   patientForm.appendChild(textPatient)
+  const inputs = document.querySelectorAll('.input')
+  inputs.forEach((element) => {
+    element.value = ''
+  })
 })
-let table = document.querySelector('#table')
+
 let tBody = document.querySelector('#tbody') as HTMLTableElement
 tBody.innerHTML = ''
 btnCheckDoctors?.addEventListener('click', () => {
@@ -212,18 +219,24 @@ btnCheckDoctors?.addEventListener('click', () => {
 })
 
 function scheduleAppointment(id: number) {
-  const inputIdPatient = Number(
-    (document.querySelector('#patient-id') as HTMLInputElement).value
+  let inputIdPatient = document.querySelector('#patient-id') as HTMLInputElement
+
+  const scheduleResponse = myHosp.scheduleAppointment(
+    id,
+    Number(inputIdPatient.value)
   )
-  const scheduleResponse = myHosp.scheduleAppointment(id, inputIdPatient)
-  const paragraph = document.createElement('p')
+
+  const paragraph = document.querySelector(
+    '#patient-response'
+  ) as HTMLParagraphElement
 
   if (scheduleResponse) {
+    inputIdPatient.value = ''
     const table = document.querySelector('.table') as HTMLTableElement
     table.style.display = 'none'
-    paragraph.textContent = 'Scheduled Appointment'
+    paragraph.textContent = 'Scheduled Appointment!'
   } else {
-    paragraph.textContent = 'You need to register as a patient!'
+    paragraph.textContent = 'You needed to register as patient!'
   }
 
   appointmentItem?.appendChild(paragraph)
@@ -239,15 +252,16 @@ const btnCheckAppointmentDoctor = document.querySelector(
   '#btn-check-appointment-doctor'
 )
 btnCheckAppointmentPatient?.addEventListener('click', () => {
-  const inputIdPatient = Number(
-    (document.querySelector('#patient-id') as HTMLInputElement).value
-  )
+  const inputIdPatient = document.querySelector(
+    '#patientId'
+  ) as HTMLInputElement
 
   if (inputIdPatient) {
     const currentPatient = myHosp.listedPatients.find(
-      (patient) => patient.id === inputIdPatient
+      (patient) => patient.id === Number(inputIdPatient.value)
     )
 
+    inputIdPatient.value = ''
     currentPatient?.listAppointments().forEach((appointment) => {
       const infosAppointment = document.createElement('div')
       infosAppointment.classList.add('item-appointments')
