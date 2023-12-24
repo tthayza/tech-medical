@@ -26,7 +26,11 @@ const monitorDiagnosis = document.querySelector(
   '#monitor-diagnosis'
 ) as HTMLDivElement
 const table = document.querySelector('#table') as HTMLTableElement
+const paragraphPatientResponse = document.querySelector(
+  '#patient-response'
+) as HTMLParagraphElement
 let patientId = document.querySelector('.patientId') as HTMLDivElement
+
 let doctorId = document.querySelector('.doctorId') as HTMLDivElement
 const med1 = new Doctor(
   'Fabiana',
@@ -115,6 +119,8 @@ backHomeBtn.addEventListener('click', (e) => {
     '.item-appointments'
   ) as HTMLDivElement
   if (appointmentsElement) appointmentsElement.style.display = 'none'
+  textPatient.style.display = 'none'
+  paragraphPatientResponse.style.display = 'none'
 })
 
 function sendData(typeForm: HTMLFormElement) {
@@ -226,20 +232,16 @@ function scheduleAppointment(id: number) {
     Number(inputIdPatient.value)
   )
 
-  const paragraph = document.querySelector(
-    '#patient-response'
-  ) as HTMLParagraphElement
-
   if (scheduleResponse) {
     inputIdPatient.value = ''
     const table = document.querySelector('.table') as HTMLTableElement
     table.style.display = 'none'
-    paragraph.textContent = 'Scheduled Appointment!'
+    paragraphPatientResponse.textContent = 'Scheduled Appointment!'
   } else {
-    paragraph.textContent = 'You needed to register as patient!'
+    paragraphPatientResponse.textContent = 'You needed to register as patient!'
   }
 
-  appointmentItem?.appendChild(paragraph)
+  appointmentItem?.appendChild(paragraphPatientResponse)
 }
 let divAppointmentsArea = document.querySelector('#check-appointments')
 let responseDiagnosis = document.querySelector(
