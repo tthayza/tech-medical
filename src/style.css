@@ -115,6 +115,23 @@ h1 {
   margin: 15px;
 }
 
+input[type='text'],
+input[type='number'],
+select {
+  padding: 6px;
+  border: 1px solid darkgrey;
+  border-radius: 5px;
+  box-shadow: 0 0 3px rgba(159, 186, 237, 0.5);
+  color: rgb(57, 36, 95);
+  background-color: #ebe7f3;
+}
+
+input:focus,
+select:focus {
+  outline: none;
+  box-shadow: 0 0 4px rgb(57, 36, 95);
+}
+
 .item-appointments {
   width: 100%;
   height: fit-content;
