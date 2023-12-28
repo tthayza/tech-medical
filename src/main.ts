@@ -22,9 +22,7 @@ const btnCheckDoctors = document.querySelector('#btn-check-doctors')
 const appointmentItem = document.querySelector(
   '#schedule-appointment'
 ) as HTMLDivElement
-const monitorDiagnosis = document.querySelector(
-  '#monitor-diagnosis'
-) as HTMLDivElement
+
 const table = document.querySelector('#table') as HTMLTableElement
 const paragraphPatientResponse = document.querySelector(
   '#patient-response'
@@ -32,6 +30,7 @@ const paragraphPatientResponse = document.querySelector(
 let patientId = document.querySelector('.patientId') as HTMLDivElement
 
 let doctorId = document.querySelector('.doctorId') as HTMLDivElement
+
 const med1 = new Doctor(
   'Fabiana',
   Specialization.Cardiologist,
@@ -121,6 +120,16 @@ backHomeBtn.addEventListener('click', (e) => {
   if (appointmentsElement) appointmentsElement.style.display = 'none'
   textPatient.style.display = 'none'
   paragraphPatientResponse.style.display = 'none'
+  textDoc.textContent = ''
+  if (enterDivForm.classList.contains('block')) {
+    enterDivForm.classList.remove('block')
+  }
+  if (divDiagnosisForm.classList.contains('block')) {
+    divDiagnosisForm.classList.remove('block')
+  }
+  btnCheckDiagnosisArea.style.display = 'block'
+  btnEnterDiagnosis.style.display = 'block'
+  responseText.textContent = ''
 })
 
 function sendData(typeForm: HTMLFormElement) {
@@ -186,7 +195,6 @@ patientForm.addEventListener('submit', function (event) {
 })
 
 let tBody = document.querySelector('#tbody') as HTMLTableElement
-tBody.innerHTML = ''
 btnCheckDoctors?.addEventListener('click', () => {
   const specialization = appointmentSelect.value as Specialization
   const listDoctors = myHosp.checkAvailableDoctors(specialization)
@@ -222,6 +230,7 @@ btnCheckDoctors?.addEventListener('click', () => {
     tBody?.appendChild(newRow)
   })
   table?.appendChild(tBody)
+  table.style.display = 'flex'
 })
 
 function scheduleAppointment(id: number) {
@@ -231,11 +240,12 @@ function scheduleAppointment(id: number) {
     id,
     Number(inputIdPatient.value)
   )
-
+  paragraphPatientResponse.style.display = 'block'
   if (scheduleResponse) {
     inputIdPatient.value = ''
     const table = document.querySelector('.table') as HTMLTableElement
     table.style.display = 'none'
+
     paragraphPatientResponse.textContent = 'Scheduled Appointment!'
   } else {
     paragraphPatientResponse.textContent = 'You needed to register as patient!'
@@ -304,10 +314,12 @@ btnCheckAppointmentDoctor?.addEventListener('click', () => {
 let divDiagnosisForm = document.querySelector(
   '#check-diagnosis-item'
 ) as HTMLDivElement
-let response = document.createElement('p')
-const btnCheckDiagnosisArea = document.querySelector('#check-diagnosis-area')
+let responseText = document.createElement('p')
+const btnCheckDiagnosisArea = document.querySelector(
+  '#check-diagnosis-area'
+) as HTMLDivElement
 btnCheckDiagnosisArea?.addEventListener('click', () => {
-  response.innerHTML = ``
+  responseText.innerHTML = ``
   divDiagnosisForm.classList.toggle('block')
   const btnEnterDiagnosis = document.querySelector(
     '#btn-enter-diagnosis'
@@ -319,7 +331,7 @@ btnCheckDiagnosisArea?.addEventListener('click', () => {
 
 const btnCheckDiagnosisPatient = document.querySelector(
   '#check-diagnosis-patient'
-)
+) as HTMLButtonElement
 btnCheckDiagnosisPatient?.addEventListener('click', () => {
   const patientIdDiagnosis = Number(
     (document.querySelector('#patient-id-diagnosis') as HTMLInputElement).value
@@ -339,13 +351,13 @@ btnCheckDiagnosisPatient?.addEventListener('click', () => {
         return
       }
     } else {
-      response.innerHTML = `<p>There no available diagnosis for that patient</p>`
+      responseText.innerHTML = `<p>There no available diagnosis for that patient</p>`
       return
     }
   } else {
-    response.innerHTML = `Patient not found`
+    responseText.innerHTML = `Patient not found`
 
-    responseDiagnosis!.appendChild(response)
+    responseDiagnosis!.appendChild(responseText)
   }
 })
 
@@ -358,12 +370,17 @@ function searchPatientById(patientId: number): Patient | undefined {
   return undefined
 }
 
+const enterDivForm = document.querySelector(
+  '#enter-diagnosis-item'
+) as HTMLDivElement
 const btnEnterDiagnosis = document.querySelector(
   '#btn-enter-diagnosis'
 ) as HTMLButtonElement
 btnEnterDiagnosis.addEventListener('click', () => {
-  const enterDivForm = document.querySelector('#enter-diagnosis-item')
   enterDivForm?.classList.toggle('block')
+  if (btnCheckDiagnosisArea.style.display === 'none') {
+    btnCheckDiagnosisArea.style.display = 'block'
+  } else btnCheckDiagnosisArea.style.display = 'none'
 })
 
 start()
