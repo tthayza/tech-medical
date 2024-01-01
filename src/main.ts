@@ -171,9 +171,10 @@ doctorForm.addEventListener('submit', function (event) {
   doctorForm.appendChild(textDoc)
 
   loadSpecializations()
-  const inputs = document.querySelectorAll('.input')
+  const inputs = document.querySelectorAll('.input') as NodeList
+
   inputs.forEach((element) => {
-    element.value = ''
+    element.textContent = ''
   })
 })
 
@@ -188,9 +189,9 @@ patientForm.addEventListener('submit', function (event) {
   textPatient.textContent = `Registered Patient!`
 
   patientForm.appendChild(textPatient)
-  const inputs = document.querySelectorAll('.input')
+  const inputs = document.querySelectorAll('.input') as NodeList
   inputs.forEach((element) => {
-    element.value = ''
+    element.textContent = ''
   })
 })
 
