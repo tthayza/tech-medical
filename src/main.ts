@@ -1,3 +1,4 @@
+import { Appointment } from './models/Appointment'
 import { Doctor, Period, Specialization } from './models/Doctor'
 import { Hospital } from './models/Hospital'
 import { Patient } from './models/Patient'
@@ -30,6 +31,25 @@ const paragraphPatientResponse = document.querySelector(
 let patientId = document.querySelector('.patientId') as HTMLDivElement
 
 let doctorId = document.querySelector('.doctorId') as HTMLDivElement
+const divAppointmentsAreaPat = document.querySelector(
+  '#check-appointments-pat-area'
+)
+const divAppointmentsAreaDoc = document.querySelector(
+  '#check-appointments-doc-area'
+)
+let responseDiagnosis = document.querySelector(
+  '#response-diagnosis'
+) as HTMLDivElement
+const btnCheckAppointmentPatient = document.querySelector(
+  '#btn-check-appointment-patient'
+)
+const btnCheckAppointmentDoctor = document.querySelector(
+  '#btn-check-appointment-doctor'
+)
+const infosElement = document.querySelector(
+  '#infos-element-appointment'
+) as HTMLDivElement
+infosElement.classList.add('item-appointments')
 
 const med1 = new Doctor(
   'Fabiana',
@@ -130,6 +150,7 @@ backHomeBtn.addEventListener('click', (e) => {
   btnCheckDiagnosisArea.style.display = 'block'
   btnEnterDiagnosis.style.display = 'block'
   responseText.textContent = ''
+  infosElement.style.display = 'none'
 })
 
 function sendData(typeForm: HTMLFormElement) {
@@ -174,7 +195,8 @@ doctorForm.addEventListener('submit', function (event) {
   const inputs = document.querySelectorAll('.input') as NodeList
 
   inputs.forEach((element) => {
-    element.textContent = ''
+    console.log(element)
+    element.value = ''
   })
 })
 
@@ -187,11 +209,12 @@ patientForm.addEventListener('submit', function (event) {
   const newPatient = new Patient(formData.namePatient, Number(formData.id))
   myHosp.registerPatient(newPatient)
   textPatient.textContent = `Registered Patient!`
+  textPatient.style.display = 'block'
 
   patientForm.appendChild(textPatient)
   const inputs = document.querySelectorAll('.input') as NodeList
   inputs.forEach((element) => {
-    element.textContent = ''
+    element.value = ''
   })
 })
 
@@ -200,7 +223,7 @@ btnCheckDoctors?.addEventListener('click', () => {
   const specialization = appointmentSelect.value as Specialization
   const listDoctors = myHosp.checkAvailableDoctors(specialization)
   tBody.innerHTML = ''
-
+  infosElement.style.display = 'none'
   const newRow = document.createElement('tr')
   const newData = document.createElement('td')
   newData.classList.add('title-table')
@@ -254,16 +277,7 @@ function scheduleAppointment(id: number) {
 
   appointmentItem?.appendChild(paragraphPatientResponse)
 }
-let divAppointmentsArea = document.querySelector('#check-appointments')
-let responseDiagnosis = document.querySelector(
-  '#response-diagnosis'
-) as HTMLDivElement
-const btnCheckAppointmentPatient = document.querySelector(
-  '#btn-check-appointment-patient'
-)
-const btnCheckAppointmentDoctor = document.querySelector(
-  '#btn-check-appointment-doctor'
-)
+
 btnCheckAppointmentPatient?.addEventListener('click', () => {
   const inputIdPatient = document.querySelector(
     '#patientId'
@@ -274,42 +288,83 @@ btnCheckAppointmentPatient?.addEventListener('click', () => {
       (patient) => patient.id === Number(inputIdPatient.value)
     )
 
-    inputIdPatient.value = ''
-    currentPatient?.listAppointments().forEach((appointment) => {
-      const infosAppointment = document.createElement('div')
-      infosAppointment.classList.add('item-appointments')
-      infosAppointment.innerHTML = `
-      <h4> Appointment Successfully Scheduled! </h4>
-      <p>Patient: ${appointment.getPatient().name}</p>
-      <p>Doctor: ${appointment.getDoctor().name}</p>
-      <p>Date: ${appointment.date.toLocaleDateString()} </p>
-      <p>Hour: ${appointment.date.toLocaleTimeString()}</p>
-      `
+    infosElement.textContent = ''
+    infosElement.style.display = 'flex'
+    if (currentPatient && currentPatient.listAppointments().length > 0) {
+      currentPatient?.listAppointments().forEach((appointment) => {
+        infosElement.innerHTML = `
+        <h4> Appointment Successfully Scheduled! </h4>
+        <p>Patient: ${appointment.getPatient().name}</p>
+        <p>Doctor: ${appointment.getDoctor().name}</p>
+        <p>Date: ${appointment.date.toLocaleDateString()} </p>
+        <p>Hour: ${appointment.date.toLocaleTimeString()}</p>
+        `
+      })
+    } else if (
+      currentPatient &&
+      currentPatient.listAppointments().length == 0
+    ) {
+      infosElement.innerHTML = `
+      <h4> There are no scheduled appointments! </h4>
 
-      divAppointmentsArea!.append(infosAppointment)
-    })
+      `
+    } else {
+      infosElement.innerHTML = `
+      <h4> ID not found. You need to register as a patient! </h4>
+
+      `
+    }
+    divAppointmentsAreaPat!.appendChild(infosElement)
   }
+  inputIdPatient.value = ''
 })
+
+function findCurrentDoctor(id: number): Doctor | undefined {
+  let currentDoctor
+  myHosp.listedDoctors.find((doctor) => {
+    if (doctor.register === id) {
+      currentDoctor = doctor
+    }
+  })
+
+  return currentDoctor
+}
+
 btnCheckAppointmentDoctor?.addEventListener('click', () => {
   const inputIdDoctor = Number(
     (document.querySelector('#doctorId') as HTMLInputElement).value
   )
+  infosElement.textContent = ''
+  infosElement.style.display = 'flex'
+  infosElement.classList.add('subitem')
+
   if (inputIdDoctor) {
-    myHosp.listedDoctors.find((doctor) => {
-      doctor.register === inputIdDoctor
-      const currentDoctor = doctor
-      currentDoctor?.listAppointments().forEach((appointment) => {
-        const infosAppointment = document.createElement('div')
-        infosAppointment.classList.add('item')
-        infosAppointment.innerHTML = `
-        <p>Doctor: ${appointment.getPatient().name}</p>
-        <p>Date: ${appointment.date.toLocaleDateString()} </p>
-        <p>Hour: ${appointment.date.toLocaleTimeString()}</p>
+    const doctorExist = findCurrentDoctor(inputIdDoctor)
+    if (doctorExist) {
+      const currentDoctor = doctorExist
+      if (currentDoctor.listAppointments().length > 0) {
+        currentDoctor.listAppointments().forEach((appointment: Appointment) => {
+          infosElement.innerHTML = `
+          <p>Patient: ${appointment.getPatient().name}</p>
+          <p>Date: ${appointment.date.toLocaleDateString()} </p>
+          <p>Hour: ${appointment.date.toLocaleTimeString()}</p>
+          `
+        })
+      } else if (currentDoctor.listAppointments().length == 0) {
+        infosElement.innerHTML = `
+        <h4>There are no appointments scheduled!</h4>
+
         `
-        divAppointmentsArea!.appendChild(infosAppointment)
-      })
-    })
+      }
+    }
+  } else {
+    infosElement.innerHTML = `
+    <h4>ID not found. You need to register as a doctor!</h4>
+
+    `
   }
+
+  divAppointmentsAreaDoc!.appendChild(infosElement)
 })
 
 let divDiagnosisForm = document.querySelector(
