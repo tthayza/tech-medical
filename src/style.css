@@ -82,8 +82,7 @@ h1 {
 #register-form {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  align-items: center;
+  gap: 25px;
 }
 
 #back-home-btn {
@@ -91,6 +90,39 @@ h1 {
   gap: 2px;
   position: absolute;
   left: 10px;
+}
+
+.option-container {
+  display: flex;
+  align-items: center;
+}
+
+.styled-radio {
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #a1a9c4;
+  border-radius: 50%;
+  margin-right: 8px;
+  cursor: pointer;
+}
+
+.styled-radio:checked {
+  background-color: rgba(159, 186, 237, 0.5);
+}
+
+.styled-radio + label {
+  cursor: pointer;
+}
+
+.label-radio {
+  color: rgb(111, 94, 127);
+  font-size: 17px;
+}
+
+.area-btn {
+  display: flex;
+  justify-content: center;
 }
 
 #container-patient-area,
