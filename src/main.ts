@@ -188,6 +188,7 @@ doctorForm.addEventListener('submit', function (event) {
     formData.period as Period
   )
   myHosp.registerDoctor(newDoctor)
+  localStorage.setItem('DOCTORS', JSON.stringify(newDoctor, null))
   textDoc.textContent = `Registered Doctor!`
   doctorForm.appendChild(textDoc)
 
@@ -212,6 +213,7 @@ patientForm.addEventListener('submit', function (event) {
   textPatient.style.display = 'block'
 
   patientForm.appendChild(textPatient)
+  localStorage.setItem('DOCTORS', JSON.stringify(newPatient, null))
   const inputs = document.querySelectorAll('.input') as NodeList
   inputs.forEach((element) => {
     element.value = ''

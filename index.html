@@ -66,15 +66,15 @@
 
               <button type="submit">Register</button>
             </form>
-            <div id="schedule-appointment" class="item">
+            <form id="schedule-appointment" class="item">
               <h3>Schedule Appointment</h3>
               <select name="" id="select-specialization" required></select>
               <button id="btn-check-doctors">Check available doctors</button>
               <label for="patient-id">Patient ID*</label>
               <input type="number" id="patient-id" required />
               <p id="patient-response"></p>
-            </div>
-            <div id="check-appointments-patient" class="item">
+            </form>
+            <form id="check-appointments-patient" class="item">
               <h3>Check Appointments</h3>
               <div class="patientId" style="display: none">
                 <label for="patientId">ID Patient*</label>
@@ -82,7 +82,7 @@
               </div>
 
               <button id="btn-check-appointment-patient">Check</button>
-            </div>
+            </form>
           </div>
           <div id="check-appointments-pat-area"></div>
         </section>
@@ -117,16 +117,16 @@
               <button class="block" id="check-diagnosis-area">
                 Check Diagnosis
               </button>
-              <div class="hide subitem" id="check-diagnosis-item">
+              <form class="hide subitem" id="check-diagnosis-item">
                 <label for="patient-id-diagnosis">Patient ID*</label>
                 <input type="text" id="patient-id-diagnosis" required />
                 <button id="check-diagnosis-patient">Check</button>
-              </div>
+              </form>
 
               <button id="btn-enter-diagnosis" style="display: block">
                 Enter Diagnosis
               </button>
-              <div class="hide subitem" id="enter-diagnosis-item">
+              <form class="hide subitem" id="enter-diagnosis-item">
                 <label for="appointment-id">Appointment ID*</label>
                 <input type="text" id="appointment-id" required />
                 <label for="diagnosis-title">Diagnosis*</label>
@@ -136,16 +136,16 @@
                 <label for="diagnosis-treatment">Suggested Treatment*</label>
                 <input type="text" id="diagnosis-treatment" />
                 <button id="send-diagnosis">Send Diagnosis</button>
-              </div>
+              </form>
               <div id="response-diagnosis"></div>
             </div>
             <div id="check-appointments-doctor" class="item">
               <h3>Check Appointments</h3>
 
-              <div class="doctorId" style="display: none">
+              <form class="doctorId" style="display: none">
                 <label for="doctorId">ID Doctor*</label>
                 <input type="text" id="doctorId" />
-              </div>
+              </form>
 
               <button id="btn-check-appointment-doctor">Check</button>
             </div>
